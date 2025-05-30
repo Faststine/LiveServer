@@ -2,6 +2,7 @@
 #include "network/base/Network.h"
 #include <unistd.h>
 #include <fcntl.h>
+#include <iostream>
 
 using namespace tmms::network;
 PipEvent::PipEvent(EventLoop *loop)
@@ -13,7 +14,7 @@ PipEvent::PipEvent(EventLoop *loop)
         NETWORK_ERROR << "pipe2 open failed";
         exit(-1);
     }
-    fd_ = fd[0];
+    event_read_fd_ = fd[0];
     write_fd_ = fd[1];
 }
 
@@ -26,11 +27,12 @@ PipEvent::~PipEvent()
 void PipEvent::OnRead()
 {
     int64_t tmp;
-    auto ret = ::read(fd_, &tmp, sizeof(tmp));
+    auto ret = ::read(event_read_fd_, &tmp, sizeof(tmp));
     if(ret < 0)
     {
         NETWORK_ERROR << "pipe read error.error: " << errno;
     }
+    std::cout << "pipe read tmp : " << tmp << std::endl;
 }
 void PipEvent::OnClose()
 {

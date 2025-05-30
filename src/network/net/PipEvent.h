@@ -9,7 +9,6 @@ namespace tmms
         {
         private:
             int write_fd_{-1};
-            int fd_{-1};
         public:
             PipEvent(EventLoop *loop);
             ~PipEvent();

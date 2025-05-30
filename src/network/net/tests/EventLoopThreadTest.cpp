@@ -1,6 +1,7 @@
 #include "network/net/EventLoopThread.h"
 #include "network/net/EventLoop.h"
 #include "network/net/PipEvent.h"
+#include "base/TTime.h"
 #include <iostream>
 
 using namespace tmms::network;
@@ -24,10 +25,13 @@ void TestEventLoopThread()
     if(loop)  // 这个loop是内部局部loop的引用，如果内部的eventloop停止了就变nullptr了，实现控制
     {
         std::cout << "loop : " << loop << std::endl;
-        PipEvent::ptr pipeEvent = std::make_shared<PipEvent>(loop);
-        loop->AddEvent(pipeEvent);
+        PipEvent::ptr pipEvent = std::make_shared<PipEvent>(loop);
+        loop->AddEvent(pipEvent);
         int64_t test = 123456;
-        pipeEvent->Write((const char*)&test, sizeof(test));
+        pipEvent->Write((const char*)&test, sizeof(test));
+
+        th = std::thread(writeDataPeriodically, pipEvent);
+        th.detach();
         while(1)
         {
 
