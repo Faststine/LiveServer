@@ -13,7 +13,7 @@
 using namespace tmms::network;
 
 Event::Event()
-:fd_(-1), loop_(nullptr)
+:event_read_fd_(-1), loop_(nullptr)
 {
 }
 
@@ -23,7 +23,7 @@ Event::Event(EventLoop *loop)
 }
 
 Event::Event(EventLoop *loop, int fd)
-:fd_(fd), loop_(loop)
+:event_read_fd_(fd), loop_(loop)
 {
 }
 
@@ -63,14 +63,14 @@ bool Event::EnableReading(bool enable)
 
 int Event::Fd() const
 {
-    return fd_;
+    return event_read_fd_;
 }
 
 void Event::Close()
 {
-    if(fd_ > 0)
+    if(event_read_fd_ > 0)
     {
-        ::close(fd_);
-        fd_ = -1;
+        ::close(event_read_fd_);
+        event_read_fd_ = -1;
     }
 }

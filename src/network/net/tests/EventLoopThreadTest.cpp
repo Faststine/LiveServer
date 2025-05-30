@@ -8,6 +8,14 @@ using namespace tmms::network;
 EventLoopThread eventLoop_thread;   // 构造器自动创建一个线程
 std::thread th;
 
+void writeDataPeriodically(std::shared_ptr<PipEvent> pipeEvent) {
+    while (true) {
+        int64_t now = tmms::base::TTime::NowMS();
+        pipeEvent->Write((const char*)&now, sizeof(now));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
 void TestEventLoopThread()
 {
     eventLoop_thread.Run(); // 解除loop前的阻塞，eventloop开始循环
@@ -22,6 +30,7 @@ void TestEventLoopThread()
         pipeEvent->Write((const char*)&test, sizeof(test));
         while(1)
         {
+
             std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
     }

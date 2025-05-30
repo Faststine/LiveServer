@@ -129,9 +129,9 @@ void EventLoop::AddEvent(const Event::ptr &event)
     memset(&ev, 0x00, sizeof(struct epoll_event));
 
     ev.events = event->event_;
-    ev.data.fd = event->fd_;
+    ev.data.fd = event->event_read_fd_;
     // 添加epoll事件
-    if(-1 == epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, event->fd_, &ev))
+    if(-1 == epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, event->event_read_fd_, &ev))
     {
         std::cout << "epoll_ctl_add failed! errno = " << errno << std::endl;
     }
@@ -152,9 +152,9 @@ void EventLoop::DelEvent(const Event::ptr &event)
     memset(&ev, 0x00, sizeof(struct epoll_event));
 
     ev.events = event->event_;
-    ev.data.fd = event->fd_;
+    ev.data.fd = event->event_read_fd_;
     // 删除epoll事件
-    if(-1 == epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, event->fd_, &ev))
+    if(-1 == epoll_ctl(epoll_fd_, EPOLL_CTL_DEL, event->event_read_fd_, &ev))
     {
         std::cout << "epoll_ctl_del failed!" << std::endl;
     }
@@ -186,9 +186,9 @@ bool EventLoop::EnableEventWriting(const Event::ptr &event, bool enable)
     memset(&ev, 0x00, sizeof(struct epoll_event));
 
     ev.events = event->event_;
-    ev.data.fd = event->fd_;
+    ev.data.fd = event->event_read_fd_;
     // 添加epoll事件
-    if(-1 == epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, event->fd_, &ev))
+    if(-1 == epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, event->event_read_fd_, &ev))
     {
         std::cout << "epoll_ctl_mod failed! errno = " << errno << std::endl;
     }
@@ -218,9 +218,9 @@ bool EventLoop::EnableEventReading(const Event::ptr &event, bool enable)
     memset(&ev, 0x00, sizeof(struct epoll_event));
 
     ev.events = event->event_;
-    ev.data.fd = event->fd_;
+    ev.data.fd = event->event_read_fd_;
     // 添加epoll事件
-    epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, event->fd_, &ev);
+    epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, event->event_read_fd_, &ev);
 
     return true;
 }

@@ -44,7 +44,7 @@ namespace tmms
             void Close();
         
         protected:
-            int fd_{-1};
+            int event_read_fd_{-1};
             EventLoop *loop_{nullptr}; // 在哪个loop中
             int event_{0};         // 什么事件 EPOLLIN，一定要初始化成0，初始化为-1就出错了
         }; 
