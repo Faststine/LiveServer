@@ -10,6 +10,16 @@ EventLoopThread::EventLoopThread()
 
 EventLoopThread::~EventLoopThread()
 {
+    Run();
+    if(loop_)
+    {
+        loop_->Quit();
+    }
+
+    if(thread_.joinable())
+    {
+        thread_.join();
+    }
 }
 
 void EventLoopThread::Run()

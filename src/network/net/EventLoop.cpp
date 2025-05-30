@@ -12,11 +12,14 @@ using namespace tmms::network;
 static thread_local EventLoop *t_local_eventloop = nullptr; // 每个线程独享自己的eventloop
 
 EventLoop::EventLoop()
-:epoll_fd_(::epoll_create(1024)),  // epoll_create的文件描述符数量，建议值
-epoll_events_(1024)
+:epoll_events_(1024)
 {
     // 初始化设置
-
+    epoll_fd_ = epoll_create(1024);  // 参数在Linux 2.6.8后被忽略，但必须为正数
+    if (epoll_fd_ == -1) {
+        perror("epoll_create failed");
+        // 处理错误
+    }
     if(t_local_eventloop)
     {
         NETWORK_ERROR << "there alread had a eventloop!!!";
