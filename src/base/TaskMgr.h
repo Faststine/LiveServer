@@ -3,7 +3,7 @@
  * @Date: 2024-06-02 17:00:58
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-03 11:36:23
- * @FilePath: /tmms/src/base/TaskMgr.h
+ * @FilePath: /Live/src/base/TaskMgr.h
  * @Description:  learn 
  */
 #pragma once
@@ -13,7 +13,7 @@
 #include <unordered_set>
 #include <mutex>
 
-namespace tmms
+namespace Live
 {
     namespace base
     {
@@ -33,6 +33,6 @@ namespace tmms
             std::mutex lock_;
         };
         // 方便单例访问
-        #define sTaskMgr tmms::base::Singleton<tmms::base::TaskMgr>::Instance()
+        #define sTaskMgr Live::base::Singleton<Live::base::TaskMgr>::Instance()
     } 
-} // namespace tmms
+} // namespace Live

@@ -1,18 +1,10 @@
-/*
- * @Author: heart1128 1020273485@qq.com
- * @Date: 2024-06-03 15:08:10
- * @LastEditors: heart1128 1020273485@qq.com
- * @LastEditTime: 2024-06-07 16:23:40
- * @FilePath: /tmms/src/network/net/Event.h
- * @Description:  learn 
- */
 #pragma once
 
 #include <string>
 #include <memory>
 #include <sys/epoll.h>
 
-namespace tmms
+namespace Live
 {
     namespace network
     {  

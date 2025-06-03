@@ -12,7 +12,7 @@
 #include "FileLog.h"
 #include <string>
 
-namespace tmms
+namespace Live
 {
     namespace base
     {
@@ -47,4 +47,4 @@ namespace tmms
 
     } // namespace base
     
-} // namespace tmms
+} // namespace Live

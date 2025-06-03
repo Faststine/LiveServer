@@ -3,13 +3,13 @@
  * @Date: 2024-06-01 16:48:58
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-03 11:36:35
- * @FilePath: /tmms/src/base/TaskMgr.cpp
+ * @FilePath: /Live/src/base/TaskMgr.cpp
  * @Description:  learn
  */
 #include "TaskMgr.h"
 #include "TTime.h"
 
-using namespace tmms::base;
+using namespace Live::base;
 
 /// @brief 定时执行任务
 void TaskMgr::OnWork()

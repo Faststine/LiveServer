@@ -8,7 +8,7 @@
  */
 #include "TTime.h"
 
-using namespace tmms::base;
+using namespace Live::base;
 
 /// @brief 获取当前的精确时间（1970.1.1到现在的），单位是ms
 /// @return 精确时间，单位：ms

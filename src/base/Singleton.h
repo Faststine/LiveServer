@@ -10,7 +10,7 @@
 #include "NonCopyable.h"
 #include <pthread.h>
 
-namespace tmms
+namespace Live
 {
     namespace base
     {
@@ -57,4 +57,4 @@ namespace tmms
 
     } // namespace base
 
-}// tmms
+}// Live

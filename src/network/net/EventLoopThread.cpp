@@ -1,6 +1,6 @@
 #include "EventLoopThread.h"
 
-using namespace tmms::network;
+using namespace Live::network;
 
 EventLoopThread::EventLoopThread()
 :thread_([this](){StartEventLoop();})   

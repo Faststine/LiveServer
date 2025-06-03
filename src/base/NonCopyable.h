@@ -8,7 +8,7 @@
  */
 #pragma once
 
-namespace tmms
+namespace Live
 {
     namespace base
     {
@@ -26,4 +26,4 @@ namespace tmms
             NonCopyable &operator=(const NonCopyable&) = delete;
         };   
     } // namespace base
-} // namespace tmms
+} // namespace Live

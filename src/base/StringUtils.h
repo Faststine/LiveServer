@@ -3,7 +3,7 @@
  * @Date: 2024-06-01 14:46:07
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-09 15:28:45
- * @FilePath: /tmms/src/base/StringUtils.h
+ * @FilePath: /Live/src/base/StringUtils.h
  * @Description:  learn 
  */
 #pragma once
@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace tmms
+namespace Live
 {
     namespace base
     {

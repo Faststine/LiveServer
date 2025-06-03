@@ -3,14 +3,14 @@
  * @Date: 2024-06-01 18:25:10
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-03 14:04:16
- * @FilePath: /tmms/src/base/LogStream.h
+ * @FilePath: /Live/src/base/LogStream.h
  * @Description:  learn 
  */
 #pragma once
 #include "Logger.h"
 #include <sstream>
 
-namespace tmms
+namespace Live
 {
    namespace base
    {
@@ -42,26 +42,26 @@ namespace tmms
 
    } // namespace base
 
-} // namespace tmms
+} // namespace Live
 
 
 #define LOG_TRACE   \
-    if(g_logger && tmms::base::g_logger->GetLogLevel() <= KTrace)   \
-        tmms::base::LogStream(g_logger, __FILE__, __LINE__, tmms::base::KTrace, __func__) 
+    if(g_logger && Live::base::g_logger->GetLogLevel() <= KTrace)   \
+        Live::base::LogStream(g_logger, __FILE__, __LINE__, Live::base::KTrace, __func__) 
 
 #define LOG_DEBUG   \
-    if(g_logger && tmms::base::g_logger->GetLogLevel() <= KDebug)   \
-        tmms::base::LogStream(g_logger, __FILE__, __LINE__, tmms::base::KDebug, __func__) 
+    if(g_logger && Live::base::g_logger->GetLogLevel() <= KDebug)   \
+        Live::base::LogStream(g_logger, __FILE__, __LINE__, Live::base::KDebug, __func__) 
 
 #define LOG_WARN   \
-        tmms::base::LogStream(g_logger, __FILE__, __LINE__, tmms::base::KWarn) 
+        Live::base::LogStream(g_logger, __FILE__, __LINE__, Live::base::KWarn) 
 
 #define LOG_INFO   \
-    if(g_logger && tmms::base::g_logger->GetLogLevel() <= KInfo)   \
-        tmms::base::LogStream(g_logger, __FILE__, __LINE__, tmms::base::KTrace) 
+    if(g_logger && Live::base::g_logger->GetLogLevel() <= KInfo)   \
+        Live::base::LogStream(g_logger, __FILE__, __LINE__, Live::base::KTrace) 
 
 #define LOG_ERROR  \
-    if(g_logger && tmms::base::g_logger->GetLogLevel() <= KError)   \
-        tmms::base::LogStream(g_logger, __FILE__, __LINE__, tmms::base::KError, __func__) 
+    if(g_logger && Live::base::g_logger->GetLogLevel() <= KError)   \
+        Live::base::LogStream(g_logger, __FILE__, __LINE__, Live::base::KError, __func__) 
 
 // define不能在文件的末尾，至少加一个空行

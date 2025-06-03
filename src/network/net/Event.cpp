@@ -1,16 +1,8 @@
-/*
- * @Author: heart1128 1020273485@qq.com
- * @Date: 2024-06-03 15:08:17
- * @LastEditors: heart1128 1020273485@qq.com
- * @LastEditTime: 2024-06-07 16:23:45
- * @FilePath: /tmms/src/network/net/Event.cpp
- * @Description:  learn 
- */
 #include "Event.h"
 #include "EventLoop.h"
 #include <unistd.h>
 
-using namespace tmms::network;
+using namespace Live::network;
 
 Event::Event()
 :event_read_fd_(-1), loop_(nullptr)

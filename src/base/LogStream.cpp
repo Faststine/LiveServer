@@ -3,7 +3,7 @@
  * @Date: 2024-06-01 18:29:45
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-03 13:45:20
- * @FilePath: /tmms/src/base/LogStream.cpp
+ * @FilePath: /Live/src/base/LogStream.cpp
  * @Description:  learn 
  */
 #include "LogStream.h"
@@ -12,8 +12,8 @@
 #include <cstring>
 #include <iostream>
 
-using namespace tmms::base;
-Logger *tmms::base::g_logger;
+using namespace Live::base;
+Logger *Live::base::g_logger;
 
 static thread_local pid_t thread_id = 0;
 const char *log_string[] = {

@@ -3,13 +3,13 @@
  * @Date: 2024-06-01 18:20:04
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-24 21:16:20
- * @FilePath: /tmms/src/base/Logger.cpp
+ * @FilePath: /Live/src/base/Logger.cpp
  * @Description:  learn 
  */
 #include "Logger.h"
 #include <iostream>
 
-using namespace tmms::base;
+using namespace Live::base;
 
 Logger::Logger(FileLog::ptr log)
 :log_(log)

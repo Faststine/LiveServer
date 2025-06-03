@@ -3,14 +3,14 @@
  * @Date: 2024-06-03 14:43:39
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-03 14:44:53
- * @FilePath: /tmms/src/network/base/Network.h
+ * @FilePath: /Live/src/network/base/Network.h
  * @Description:  learn
  */
 #pragma once
 
 #include "base/LogStream.h"
 
-using namespace tmms::base;
+using namespace Live::base;
 
 #define NETWORK_TRACE LOG_TRACE
 #define NETWORK_DEBUG LOG_DEBUG

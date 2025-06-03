@@ -3,12 +3,12 @@
  * @Date: 2024-06-01 14:46:21
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-09 15:51:49
- * @FilePath: /tmms/src/base/StringUtils.cpp
+ * @FilePath: /Live/src/base/StringUtils.cpp
  * @Description:  learn 
  */
 #include "StringUtils.h"
 
-using namespace tmms::base;
+using namespace Live::base;
 
 /// @brief 子串头部匹配
 /// @param s    源string

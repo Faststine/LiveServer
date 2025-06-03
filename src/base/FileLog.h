@@ -3,14 +3,14 @@
  * @Date: 2024-06-02 17:00:58
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-03 11:34:27
- * @FilePath: /tmms/src/base/FileLog.h
+ * @FilePath: /Live/src/base/FileLog.h
  * @Description:  learn 
  */
 #pragma once
 #include <string>
 #include <memory>
 
-namespace tmms
+namespace Live
 {
     namespace base
     {   
@@ -50,4 +50,4 @@ namespace tmms
         
     } // namespace base
     
-} // namespace tmms
+} // namespace Live

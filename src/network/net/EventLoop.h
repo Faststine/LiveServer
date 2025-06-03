@@ -1,11 +1,3 @@
-/*
- * @Author: heart1128 1020273485@qq.com
- * @Date: 2024-06-03 14:45:22
- * @LastEditors: heart1128 1020273485@qq.com
- * @LastEditTime: 2024-06-22 19:09:17
- * @FilePath: /tmms/src/network/net/EventLoop.h
- * @Description:  learn 
- */
 #pragma once
 
 #include <vector>
@@ -15,7 +7,7 @@
 #include <queue>
 #include <mutex>
 #include "Event.h"
-namespace tmms
+namespace Live
 {
     namespace network
     {
@@ -59,4 +51,4 @@ namespace tmms
         
     } // namespace network
     
-} // namespace tmms
+} // namespace Live

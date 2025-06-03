@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <iostream>
 
-using namespace tmms::network;
+using namespace Live::network;
 
 static thread_local EventLoop *t_local_eventloop = nullptr; // 每个线程独享自己的eventloop
 
@@ -99,7 +99,7 @@ void EventLoop::Loop()
             }
 
             //RunFunctions();     // 无论什么触发了epoll。都会把任务队列的任务全部执行
-            //int64_t now = tmms::base::TTime::NowMS();
+            //int64_t now = Live::base::TTime::NowMS();
         }
         else if(ret < 0)        // error
         {

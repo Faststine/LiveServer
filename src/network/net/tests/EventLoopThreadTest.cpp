@@ -5,14 +5,14 @@
 #include "network/net/EventLoopThreadPool.h"
 #include <iostream>
 
-using namespace tmms::network;
+using namespace Live::network;
 
 EventLoopThread eventLoop_thread;   // 构造器自动创建一个线程
 std::thread th;
 
 void writeDataPeriodically(std::shared_ptr<PipEvent> pipeEvent) {
     while (true) {
-        int64_t now = tmms::base::TTime::NowMS();
+        int64_t now = Live::base::TTime::NowMS();
         pipeEvent->Write((const char*)&now, sizeof(now));
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }

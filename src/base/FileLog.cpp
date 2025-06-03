@@ -3,7 +3,7 @@
  * @Date: 2024-06-01 20:55:06
  * @LastEditors: heart1128 1020273485@qq.com
  * @LastEditTime: 2024-06-03 11:34:36
- * @FilePath: /tmms/src/base/FileLog.cpp
+ * @FilePath: /Live/src/base/FileLog.cpp
  * @Description:  learn
  */
 #include "FileLog.h"
@@ -13,7 +13,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-using namespace tmms::base;
+using namespace Live::base;
 
 /// @brief 
 /// @param filePath 
