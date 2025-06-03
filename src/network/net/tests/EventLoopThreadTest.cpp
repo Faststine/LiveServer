@@ -47,16 +47,18 @@ void TestEventLoopThreadPool()
     EventLoopThreadPool pool(2,0,2);
     pool.Start();
 
+    std::cout << "thread id:"<<std::this_thread::get_id() << std::endl;
     std::vector<EventLoop*> loopList = pool.GetLoops();
-    for (size_t i = 0; i < loopList.size(); i++)
-    {
-        std::cout << "loop:"<<loopList[i]<<std::endl;
+    for (size_t i = 0; i < loopList.size(); i++) {
+        loopList[i]->RunInLoop([eLoop = loopList[i]](){
+            std::cout << "loop:"<<eLoop<<" thread id:"<<std::this_thread::get_id() << std::endl;
+        });
     }
 
-    EventLoop* loop = pool.GetNextLoop();
-    std::cout << "loop:"<<loop<<std::endl;
-    loop = pool.GetNextLoop();
-    std::cout << "loop:"<<loop<<std::endl;
+    // EventLoop* loop = pool.GetNextLoop();
+    // std::cout << "loop:"<<loop<<std::endl;
+    // loop = pool.GetNextLoop();
+    // std::cout << "loop:"<<loop<<std::endl;
 }
 
 int main()
@@ -64,8 +66,7 @@ int main()
     //TestEventLoopThread();
 
     TestEventLoopThreadPool();
-    while(1)
-    {
+    while(1) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     return 0;

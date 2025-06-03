@@ -7,15 +7,14 @@
 #include <queue>
 #include <mutex>
 #include "Event.h"
+#include "PipEvent.h"
 namespace Live
 {
     namespace network
     {
         using EventPtr = std::shared_ptr<Event>;
         using Func = std::function<void()>;
-        class EventLoop
-        {
-
+        class EventLoop {
         public:
             EventLoop();
             ~EventLoop();
@@ -33,7 +32,6 @@ namespace Live
             bool IsInLoopThread() const;
             void RunInLoop(const Func& f);
             void RunInLoop(Func &&f);
-
         
         private:
             void RunFunctions();
@@ -46,6 +44,7 @@ namespace Live
 
             std::queue<Func> functions_;
             std::mutex lock_;
+            PipEvent::ptr pipEvent_;
         };
     
         

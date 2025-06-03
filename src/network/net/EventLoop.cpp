@@ -91,6 +91,7 @@ void EventLoop::Loop()
                 {
                     event->OnWrite();
                 }
+                RunFunctions();
             }
 
             if(ret == epoll_events_.size())     // 事件吃满了数组，说明并发量很高，需要扩充事件数组
@@ -269,12 +270,9 @@ void EventLoop::RunInLoop(Func &&f)
     // 这么做的原因是，如果这个任务不是当前线程的，在这里执行了就会切换到其他线程
     // 增加了上下文切换以及线程安全的问题，所以不在这个线程的任务就添加到这个线程执行
     // 不直接执行切换上下文。
-    if(IsInLoopThread())
-    {
+    if(IsInLoopThread()) {
         f();
-    }
-    else
-    {
+    } else {
         // 加入到任务队列，然后执行回调，保证回调在同一个线程不间断执行
         std::lock_guard<std::mutex> lk(lock_);
         functions_.push(std::move(f));
@@ -292,20 +290,16 @@ void EventLoop::RunFunctions()
         auto &f = functions_.front();
         f();
         functions_.pop();
-
-        /**
-         * bug经历：
-         * 
-        functions_.pop();
-        f();
-        这样写出问题了，因为f是引用的，先删除在引用函数就出错了
-         * 
-        */
     }
 }
 
 /// @brief  通过发送管道无用数据，唤醒epoll执行任务队列中人物
 void EventLoop::WakeUp()
 {
-     
+    if (pipEvent_ == nullptr) {
+        pipEvent_ = std::make_shared<PipEvent>(this);
+        AddEvent(pipEvent_);
+    }
+    int64_t tmp = 123456;
+    pipEvent_->Write((const char*)&tmp, sizeof(tmp));
 }
