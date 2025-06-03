@@ -17,8 +17,9 @@ namespace tmms
         public:
             EventLoopThread(/* args */);
             ~EventLoopThread();
+            std::thread &Thread();
             EventLoop* Loop() const;
-        
+            using ptr = std::shared_ptr<EventLoopThread>;
         void Run();
         private:
             EventLoop* loop_{nullptr};

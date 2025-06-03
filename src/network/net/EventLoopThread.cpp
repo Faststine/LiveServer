@@ -21,6 +21,10 @@ EventLoopThread::~EventLoopThread()
         thread_.join();
     }
 }
+std::thread &EventLoopThread::Thread()
+{
+    return thread_;
+}
 
 void EventLoopThread::Run()
 {

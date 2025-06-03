@@ -2,6 +2,7 @@
 #include "network/net/EventLoop.h"
 #include "network/net/PipEvent.h"
 #include "base/TTime.h"
+#include "network/net/EventLoopThreadPool.h"
 #include <iostream>
 
 using namespace tmms::network;
@@ -40,9 +41,29 @@ void TestEventLoopThread()
     }
 }
  
+
+void TestEventLoopThreadPool()
+{
+    EventLoopThreadPool pool(2,0,2);
+    pool.Start();
+
+    std::vector<EventLoop*> loopList = pool.GetLoops();
+    for (size_t i = 0; i < loopList.size(); i++)
+    {
+        std::cout << "loop:"<<loopList[i]<<std::endl;
+    }
+
+    EventLoop* loop = pool.GetNextLoop();
+    std::cout << "loop:"<<loop<<std::endl;
+    loop = pool.GetNextLoop();
+    std::cout << "loop:"<<loop<<std::endl;
+}
+
 int main()
 {
-    TestEventLoopThread();
+    //TestEventLoopThread();
+
+    TestEventLoopThreadPool();
     while(1)
     {
         std::this_thread::sleep_for(std::chrono::seconds(1));
