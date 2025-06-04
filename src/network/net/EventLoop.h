@@ -8,6 +8,8 @@
 #include <mutex>
 #include "Event.h"
 #include "PipEvent.h"
+#include "TimingWheel.h"
+
 namespace Live
 {
     namespace network
@@ -33,6 +35,11 @@ namespace Live
             void RunInLoop(const Func& f);
             void RunInLoop(Func &&f);
         
+            void InsertEntry(uint32_t delay, EntryPtr entryPtr);   // 插入entry，设置超时时间
+            void RunAfter(double delay, Func &cb);    // 设置延迟多少时间执行
+            void RunAfter(double delay, Func &&cb);
+            void RunEvery(double interval, Func &cb);// 每隔一段时间就执行一遍
+            void RunEvery(double interval, Func &&cb);
         private:
             void RunFunctions();
             void WakeUp();      // 唤醒loop
@@ -45,6 +52,7 @@ namespace Live
             std::queue<Func> functions_;
             std::mutex lock_;
             PipEvent::ptr pipEvent_;
+            TimingWheel wheel_;
         };
     
         

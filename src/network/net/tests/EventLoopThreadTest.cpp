@@ -6,6 +6,7 @@
 #include <iostream>
 
 using namespace Live::network;
+using namespace Live::base;
 
 EventLoopThread eventLoop_thread;   // 构造器自动创建一个线程
 std::thread th;
@@ -61,11 +62,39 @@ void TestEventLoopThreadPool()
     // std::cout << "loop:"<<loop<<std::endl;
 }
 
+void TestEventLoopTimingWheel()
+{
+    EventLoopThreadPool pool(2, 0, 2);      // 2个线程，0cpu开始，2个cpu跑
+    pool.Start();
+    EventLoop* loop = pool.GetNextLoop();
+    std::cout << "loop : " << loop << std::endl; 
+
+    // 设置任务
+    loop->RunAfter(1, [](){
+        std::cout << "run after 1s now : " << Live::base::TTime::Now() << std::endl;
+    });
+    std::cout << "loop1 : " << loop << std::endl; 
+    loop->RunEvery(2, [](){
+        std::cout << "run every 2s now : " << Live::base::TTime::Now() << std::endl;
+    });
+    std::cout << "loop2 : " << loop << std::endl; 
+    loop->RunEvery(3, [](){
+        std::cout << "run every 3s now : " << Live::base::TTime::Now() << std::endl;
+    });
+    std::cout << "loop 3: " << loop << std::endl; 
+    while(1)  // 退出函数线程池就析构了
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
 int main()
 {
     //TestEventLoopThread();
 
-    TestEventLoopThreadPool();
+    //TestEventLoopThreadPool();
+
+    TestEventLoopTimingWheel();
     while(1) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }

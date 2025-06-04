@@ -91,7 +91,6 @@ void EventLoop::Loop()
                 {
                     event->OnWrite();
                 }
-                RunFunctions();
             }
 
             if(ret == epoll_events_.size())     // 事件吃满了数组，说明并发量很高，需要扩充事件数组
@@ -99,8 +98,9 @@ void EventLoop::Loop()
                 epoll_events_.resize(epoll_events_.size() * 2);
             }
 
-            //RunFunctions();     // 无论什么触发了epoll。都会把任务队列的任务全部执行
-            //int64_t now = Live::base::TTime::NowMS();
+            RunFunctions();     // 无论什么触发了epoll。都会把任务队列的任务全部执行
+            int64_t now = Live::base::TTime::NowMS();
+            wheel_.OnTimer(now);
         }
         else if(ret < 0)        // error
         {
@@ -302,4 +302,77 @@ void EventLoop::WakeUp()
     }
     int64_t tmp = 123456;
     pipEvent_->Write((const char*)&tmp, sizeof(tmp));
+}
+
+void EventLoop::InsertEntry(uint32_t delay, EntryPtr entryPtr)
+{
+    if(IsInLoopThread())
+    {
+        wheel_.InstertEntry(delay, entryPtr);
+    }
+    else        // 不在这个线程里就加入任务队列跑
+    {
+        RunInLoop([this, delay, entryPtr]{    // 同样是插入了时间轮跑
+            wheel_.InstertEntry(delay, entryPtr);
+        });
+    }
+}
+
+void EventLoop::RunAfter(double delay, Func &cb)
+{
+    if(IsInLoopThread())
+    {
+        wheel_.RunAfter(delay, cb);
+    }
+    else        // 不在这个线程里就加入任务队列跑
+    {
+        RunInLoop([this, delay, cb]{    // 同样是插入了时间轮跑
+            wheel_.RunAfter(delay, cb);
+        });
+    }
+}
+
+/// @brief 设置delay秒之后执行cb任务
+/// @param delay 单位：s
+/// @param cb void()类型的回调函数
+void EventLoop::RunAfter(double delay, Func &&cb)
+{
+    if(IsInLoopThread())
+    {
+        wheel_.RunAfter(delay, cb);
+    }
+    else        // 不在这个线程里就加入任务队列跑
+    {
+        RunInLoop([this, delay, cb]{    // 同样是插入了时间轮跑
+            wheel_.RunAfter(delay, cb);
+        });
+    }
+}
+
+void EventLoop::RunEvery(double interval, Func &cb)
+{
+    if(IsInLoopThread())
+    {
+       wheel_.RunEvery(interval, cb);
+    }
+    else        // 不在这个线程里就加入任务队列跑
+    {
+        RunInLoop([this, interval, cb]{    // 同样是插入了时间轮跑
+           wheel_.RunEvery(interval, cb);
+        });
+    }  
+}
+
+void EventLoop::RunEvery(double interval, Func &&cb)
+{
+    if(IsInLoopThread())
+    {
+       wheel_.RunEvery(interval, cb);
+    }
+    else        // 不在这个线程里就加入任务队列跑
+    {
+        RunInLoop([this, interval, cb](){    // 同样是插入了时间轮跑
+           wheel_.RunEvery(interval, cb);
+        });
+    }
 }
