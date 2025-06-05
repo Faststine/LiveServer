@@ -20,7 +20,7 @@ InetAddress::~InetAddress()
 
 void InetAddress::SetHost(const std::string &host)
 {
- //   GetIpAndPort(host, addr_, port_);
+    GetIpAndPort(host, addr_, port_);
 }
 
 void InetAddress::SetAddr(const std::string &addr)

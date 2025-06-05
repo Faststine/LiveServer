@@ -12,9 +12,12 @@ namespace Live
     {
         class InetAddress
         {
+
         public:
+            using ptr = std::shared_ptr<InetAddress>;
             InetAddress(const std::string &ip, uint16_t port, bool bv6=false);
             InetAddress(const std::string &host, bool bv6=false);
+            InetAddress() = default;
             ~InetAddress();
 
             void SetHost(const std::string &host);
