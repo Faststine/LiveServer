@@ -1,5 +1,6 @@
 #include "TcpConnect.h"
 #include "network/base/Network.h"
+#include "unistd.h"
 
 using namespace Live::network;
 
@@ -13,8 +14,6 @@ TcpConnect::~TcpConnect()
 {
     OnClose();
 }
-
-
 
 void TcpConnect::SetCloseCallback(const CloseConnectionCallback &cb)
 {
@@ -33,6 +32,27 @@ void TcpConnect::SetRecvMsgCallback(const MessageCallback& cb)
 void TcpConnect::SetRecvMsgCallback(MessageCallback&& cb)
 {
      mMessageCallback = std::move(cb);
+}
+
+void TcpConnect::SetWriteCompleteCallback(const WriteCompleteCallback &cb)
+{
+    mWriteComCallback = cb;
+}
+void TcpConnect::SetWriteCompleteCallback(const WriteCompleteCallback &&cb)
+{
+    mWriteComCallback = std::move(cb);
+}
+void TcpConnect::Send(std::list<BufferNodePtr> &list)
+{
+    loop_->RunInLoop([this,&list](){
+        SendInLoop(list);
+    });
+}
+void TcpConnect::Send(const char* buffer, int size)
+{
+    loop_->RunInLoop([this,buffer,size](){
+        SendInLoop(buffer, size);
+    });
 }
 
 void TcpConnect::OnClose()
@@ -74,6 +94,47 @@ void TcpConnect::OnRead()
     } 
 }
 
+void TcpConnect::OnWrite()
+{
+    if (mClose)
+    {
+        NETWORK_ERROR << "OnWrite";
+        return;
+    }
+
+    if (!mIovecList.empty())
+    {
+        auto ret = ::writev(event_read_fd_, &mIovecList[0], mIovecList.size());
+        if (ret > 0)
+        {
+            if (mIovecList.front().iov_len > ret)
+            {
+                mIovecList.front().iov_base = (char*)mIovecList.front().iov_base + ret;
+                mIovecList.front().iov_len -= ret;
+            } else {
+                ret -= mIovecList.front().iov_len;
+                mIovecList.erase(mIovecList.begin());
+            }
+            if (mIovecList.empty())
+            {
+                EnableWriting(false);
+                if (mWriteComCallback)
+                {
+                    mWriteComCallback(std::dynamic_pointer_cast<TcpConnect>(shared_from_this()));
+                }
+                
+            } else {
+                if (errno != EINTR && errno != EAGAIN && errno != EWOULDBLOCK )
+                {
+                    NETWORK_ERROR << "error";
+                    OnClose();
+                    return;
+                }
+            }    
+        }
+    }
+}
+
 void TcpConnect::ForceClose()
 {
     loop_->RunInLoop([this](){
@@ -85,4 +146,63 @@ void TcpConnect::OnError(const std::string &msg)
 {
     NETWORK_ERROR << "error:" <<mPeerAddr.ToIpPort()<<"msg"<< msg;
     OnClose();
+}
+
+void TcpConnect::SendInLoop(std::list<BufferNodePtr> &list)
+{
+    if (mClose)
+    {
+        NETWORK_ERROR << "SendInLoop";
+        return;
+    }
+
+    for (auto &e:list)
+    {
+        struct iovec vec;
+        vec.iov_base = (void*)e->addr;
+        vec.iov_len = e->size;
+
+        mIovecList.push_back(vec);
+    }
+
+    if (!mIovecList.empty())
+    {
+        EnableWriting(true);
+    }
+    
+    
+}
+void TcpConnect::SendInLoop(const char* buffer, int size)
+{
+    if (mClose)
+    {
+        NETWORK_ERROR << "SendInLoop";
+        return;
+    }
+    int sendLen = 0;
+    if (!mIovecList.empty())
+    {
+        sendLen = ::write(event_read_fd_, buffer, size);
+        if (sendLen < 0)
+        {
+            if (errno != EINTR && errno != EAGAIN && errno != EWOULDBLOCK )
+            {
+                NETWORK_ERROR << "error";
+                OnClose();
+                return;
+            }
+            sendLen = 0;
+        }
+        size -= sendLen;
+    }
+    if (size > 0) {
+        struct iovec vec;
+        vec.iov_base = (char*)buffer + sendLen;
+        vec.iov_len = size;
+
+        mIovecList.push_back(vec);
+        EnableWriting(true);
+
+    }
+    
 }
