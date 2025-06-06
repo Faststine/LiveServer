@@ -1,11 +1,3 @@
-/*
- * @Author: heart1128 1020273485@qq.com
- * @Date: 2024-06-03 14:43:39
- * @LastEditors: heart1128 1020273485@qq.com
- * @LastEditTime: 2024-06-03 14:44:53
- * @FilePath: /Live/src/network/base/Network.h
- * @Description:  learn
- */
 #pragma once
 
 #include "base/LogStream.h"
