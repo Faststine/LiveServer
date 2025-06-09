@@ -148,6 +148,28 @@ void TcpConnect::OnError(const std::string &msg)
     OnClose();
 }
 
+void TcpConnect::OnTimeout()
+{
+    NETWORK_ERROR << "OnTimeout error:" <<mPeerAddr.ToIpPort();
+    OnClose();
+}
+
+void TcpConnect::SetTimeoutCallback(int timeout, TimeOutCallback &cb)
+{
+    auto cp = std::dynamic_pointer_cast<TcpConnect>(shared_from_this());
+    loop_->RunAfter(timeout, [&cp,cb](){
+        cb(cp);
+    });
+}
+
+void TcpConnect::EnableCheckIdleTimeout(int32_t maxTime)
+{
+    auto tp = std::make_shared<TimeoutEntry>(std::dynamic_pointer_cast<TcpConnect>(shared_from_this()));
+    mMaxIdleTime = maxTime;
+    mTimeOutEntry = tp;
+    loop_->InsertEntry(maxTime, tp);
+}
+
 void TcpConnect::SendInLoop(std::list<BufferNodePtr> &list)
 {
     if (mClose)
@@ -194,6 +216,15 @@ void TcpConnect::SendInLoop(const char* buffer, int size)
             sendLen = 0;
         }
         size -= sendLen;
+        if (size == 0)
+        {
+            if (mWriteComCallback)
+            {
+                mWriteComCallback(std::dynamic_pointer_cast<TcpConnect>(shared_from_this()));
+            }
+            return;
+        }
+        
     }
     if (size > 0) {
         struct iovec vec;
@@ -202,7 +233,16 @@ void TcpConnect::SendInLoop(const char* buffer, int size)
 
         mIovecList.push_back(vec);
         EnableWriting(true);
+    }
+    
+}
 
+void TcpConnect::ExtendLife()
+{
+    auto tp = mTimeOutEntry.lock();
+    if (tp)
+    {
+        loop_->InsertEntry(mMaxIdleTime, tp);
     }
     
 }

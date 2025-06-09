@@ -9,3 +9,6 @@ target_link_libraries(SockOptTest base network)
 
 add_executable(AcceptorTest AcceptorTest.cpp)
 target_link_libraries(AcceptorTest base network)
+
+add_executable(TcpConnectTest TcpConnectTest.cpp)
+target_link_libraries(TcpConnectTest base network)

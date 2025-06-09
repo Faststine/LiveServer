@@ -15,6 +15,7 @@ namespace Live
 {
     namespace network 
     {
+        class TcpConnect;
         struct BufferNode
         {
             BufferNode(void *buff, size_t s)
@@ -25,12 +26,31 @@ namespace Live
             void *addr{nullptr};
             int size{0};
         };
-        class TcpConnect;
+
+        struct TimeoutEntry{
+            public:
+                TimeoutEntry(const std::weak_ptr<TcpConnect> &con)
+                :mConnect(con)
+                {
+
+                }
+                ~TimeoutEntry(){
+                    auto c = mConnect.lock();
+                    if (c)
+                    {
+                       // c.OnTimeout();
+                    }
+                    
+                }
+                std::weak_ptr<TcpConnect> mConnect;
+        };
+   
         using TcpConnectionPtr = std::shared_ptr<TcpConnect>;
         using CloseConnectionCallback = std::function<void(const TcpConnectionPtr&)>;
         using MessageCallback = std::function<void(const TcpConnectionPtr&, MsgBuffer &buffer)>;
         using WriteCompleteCallback =  std::function<void(const TcpConnectionPtr&)>;
         using BufferNodePtr = std::shared_ptr<BufferNode>;
+        using TimeOutCallback = std::function<void(const TcpConnectionPtr&)>;
         class TcpConnect : public Connection
         {
         public:
@@ -53,15 +73,22 @@ namespace Live
             void OnWrite() override;
             void ForceClose() override;
             void OnError(const std::string &msg);
+
+            void OnTimeout();
+            void SetTimeoutCallback(int timeout, TimeOutCallback &cb);
+            void EnableCheckIdleTimeout(int32_t maxTime);
         private:
             void SendInLoop(std::list<BufferNodePtr> &list);
             void SendInLoop(const char* buffer, int size);
+            void ExtendLife();
             bool mClose{false};
             CloseConnectionCallback mCloseCb;
             MsgBuffer mMessageBuffer;
             MessageCallback mMessageCallback;
             WriteCompleteCallback mWriteComCallback;
             std::vector<struct iovec> mIovecList;
+            std::weak_ptr<TimeoutEntry> mTimeOutEntry;
+            int32_t mMaxIdleTime{30};
 
         };
 
